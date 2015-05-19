@@ -9,8 +9,8 @@ Base project for FRC Team 4183, the Bit Buckets, to use for each year's code.
 - [Intro](#intro)
 - [Framework](#framework)
 	- [Basic robot classes](#basic-robot-classes)
-	- [AutonomousController](#autonomousController)
-	- [AutonomousExecutables](#autonomousexecutable)
+	- [AutonomousController](#autonomouscontroller)
+	- [AutonomousExecutables](#autonomousexecutables)
 	- [Profiles](#profiles)
 - [Examples](#examples)
 - [Detailed method guide for you Mr B](#detailed-method-guide-for-you-mr-b)
@@ -28,9 +28,7 @@ Currently, the first two features are the focus of development. Ideally, program
 
 While this project is designed for use on FRC robots running the 2015-current WPILIBJ control system, many of the classes are completely decoupled from a physical implementation. The following classes could be used on any system:
 - Everything the control package except for:
-	- [CommandExecutor](#commadnexecutor)
-	-
-	-
+	- [CommandExecutor](#commandexecutor)
 
 ## Framework
 
@@ -38,8 +36,42 @@ While this project is designed for use on FRC robots running the 2015-current WP
 
 The following classes reside directly in the /org/ directory and control or represent the robot as a whole.
 
+#### `Robot`
 
-<a name="robot"></a>[####Robot](#robot "Robot")
+`Robot` is entry point for your program and must be present to run on the roboRIO.
+
+<a name="robot-robotinit"></a>
+[`Robot.robotInit()`](#robot-robotinit) is the first method called by the VM after the OS starts. Here you should initialize things such as [`OI`](#oi) and [`AutonomousController`](#autonomouscontroller), or anything else that needs to start as soon as the robot has power.
+
+<a name="robot-disabledinit"></a>
+[`Robot.disabledInit()`](#robot-disabledinit)
+
+<a name="robot-disabledperiodic"></a>
+[`Robot.disabledPeriodic()`](#robot-disabledperiodic)
+
+<a name="robot-autonomousinit"></a>
+[`Robot.autonomousInit()`](#robot-autonomousinit)
+
+<a name="robot-autonomousperiodic"></a>
+[`Robot.autonomousPeriodic()`](#robot-autonomousperiodic)
+
+<a name="robot-teleopinit"></a>
+[`Robot.teleopInit()`](#robot-teleopinit)
+
+<a name="robot-teleopperiodic"></a>
+[`Robot.teleopPeriodic()`](#robot-teleopperiodic)
+
+<a name="robot-testinit"></a>
+[`Robot.testInit()`](#robot-testinit)
+
+<a name="robot-testperiodic"></a>
+[`Robot.testPeriodic()`](#robot-testperiodic)
+
+#### `OI`
+
+#### `RobotMap`
+
+#### `RobotConstants`
 
 ### AutonomousController
 
