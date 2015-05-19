@@ -53,21 +53,22 @@ public final class AutonomousController{
 	/**
 	 * Initializes the controller's static thread as a new thread with an anonymous Runnable parameter, which gives the desired operation.
 	 */
-	private static void generateThread(){
+	private static void generateThread(boolean startPaused){
 		runner = new Thread(new Runnable(){
 			@Override
 			public void run() {
-				runLoop();
+				runLoop(startPaused);
 			}
 		});
 	}
 	
 	/**
-	 * 
+	 * Runs the main logic loop which deals with actions in the queue.
 	 */
-	private static void runLoop(){
-		boolean sequentialRunning;
-		long loopStartTime;
+	private static void runLoop(boolean startPaused){
+		boolean sequentialRunning = false;
+		long loopStartTime = 0;
+		paused = startPaused;
 		while(!Thread.interrupted()){
 			sequentialRunning = false;
 			loopStartTime = System.currentTimeMillis();
@@ -165,6 +166,15 @@ public final class AutonomousController{
 		cancelActiveActions();
 		return true;
 	}
+	
+	/**
+	 * Initializes the thread, and sets it paused.
+	 */
+	public static void initialize(){
+		if(runner == null || runner.isInterrupted()){
+			generateThread(true);
+		}
+	}
 
 	/**
 	 * Starts the static thread. If <code>Thread.start()</code> has not yet been invoked, this method will do so. If the thread is not paused, this method
@@ -172,8 +182,7 @@ public final class AutonomousController{
 	 */
 	public static void start(){
 		if(runner == null || runner.isInterrupted() == true){
-			generateThread();
-			paused = false;
+			generateThread(false);
 			runner.start();
 		} else{
 			paused = false;
