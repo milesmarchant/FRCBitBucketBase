@@ -13,7 +13,6 @@ Base project for FRC Team 4183, the Bit Buckets, to use for each year's code.
 	- [AutonomousExecutables](#autonomousexecutables)
 	- [Profiles](#profiles)
 - [Examples](#examples)
-- [Detailed method guide for you Mr B](#detailed-method-guide-for-you-mr-b)
 
 
 ## Intro
@@ -73,8 +72,18 @@ The following classes reside directly in the /org/ directory and control or repr
 
 #### `RobotConstants`
 
-### AutonomousController
+### Control
 
+#### `AutonomousController`
+
+<a name="autonomouscontroller></a>
+[`AutonomousController`](#autonomouscontroller) is the "brain" which queues and activates autonomous actions. It is implemented as a singleton, although this is bad software-design; it will later be refactored.
+
+<a name="autonomouscontroller-runner>
+[`AutonomousController.runner`](#autononomouscontroller-runner) is a statically defined thread which takes new actions off the queue and deals with them, as well as holding and stopping currently running actions. It is initialized in the [`generateThread(boolean paused)`](#autonomouscontroller-generatethread) method so that it may be restarted if the thread dies.
+
+<a name="autonomouscontroller-generatethread></a>
+['AutonomousController.generateThread(boolean paused)`](#autonomouscontroller-generatethread)
 
 
 ### AutonomousExecutables
@@ -86,7 +95,3 @@ The following classes reside directly in the /org/ directory and control or repr
 
 
 ## Examples
-
-
-
-## Detailed method guide for you Mr B
