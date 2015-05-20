@@ -17,8 +17,8 @@ public abstract class Profile<T> {
 	public Profile(){}
 	
 	public abstract T getOutput(long time);
-
-	public abstract void generateSplines(double drive);
+	
+	public abstract void regenerateSplines(double drive);
 	
 	public abstract boolean finished(long time);
 

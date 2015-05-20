@@ -63,7 +63,7 @@ public class ProfileExecutor extends AutonomousExecutable {
 				}
 			}
 			if(maxWheelV > 1){
-				profile.generateSplines(maxWheelV);
+				profile.regenerateSplines(maxWheelV);
 				time = 0;
 			}
 		}
