@@ -1,41 +1,73 @@
 package org.frcbitbucketbase.control;
 
+import java.util.Hashtable;
+
 /**
- * A descriptor of movement in 2 dimensional vector format. Instances of this object allow classes such as <code>KinematicControllers</code> and <code>ValueControllers</code>
- * to communicate. This class is designed to be vague, so contextual meaning of the fields must be handled by the user.
- * <p>
- * For example, an action controlling a single motor requires a single vector, wherein the direction field indicates forward or backwards. A translational movement with
- * rotation may require use of several vectors, to indicate target translation and rotation, as well as instantaneous values such as target velocity.
  * 
  * @author Miles Marchant
  *
  */
-public class MovementVector {
+public class MovementVector extends Hashtable<String, Double> {
 	
-	/**
-	 * Value of this vector. This may refer to any value; for example, position, velocity, or acceleration.
-	 */
-	public double value;
-	/**
-	 * Translational direction of this vector
-	 */
-	public double direction;
-	
-	/**
-	 * Rotation of the vector
-	 */
-	public double rotation;
-	
-	/**
-	 * Constructor for the MovementVector class. Simply sets the object's fields as the matching parameters.
-	 * 
-	 * @param value      is a value given to this MovementVector
-	 * @param direction  is a direction given to this MovementVector
-	 */
-	public MovementVector(double value, double direction, double rotation){
-		this.value = value;
-		this.direction = direction;
-		this.rotation = rotation;
-	}
+	public MovementVector(){}
 
+	public static class VectorBuilder{
+		
+		MovementVector vector = new MovementVector();
+		
+		public VectorBuilder(){
+		}
+		
+		public VectorBuilder translationAngle(double translationAngle){
+			vector.put("translationAngle", translationAngle);
+			return this;
+		}
+		
+		public VectorBuilder position(double position){
+			vector.put("position", position);
+			return this;
+		}
+		
+		public VectorBuilder veloctiy(double velocity){
+			vector.put("velocity", velocity);
+			return this;
+		}
+		
+		public VectorBuilder acceleration(double acceleration){
+			vector.put("acceleration", acceleration);
+			return this;
+		}
+		
+		public VectorBuilder jerk(double jerk){
+			vector.put("jerk", jerk);
+			return this;
+		}
+		
+		public VectorBuilder angle(double angle){
+			vector.put("angle", angle);
+			return this;
+		}
+		
+		public VectorBuilder angularVel(double angularVel){
+			vector.put("angularVel", angularVel);
+			return this;
+		}
+		
+		public VectorBuilder angularAccel(double angularAccel){
+			vector.put("angularAccel", angularAccel);
+			return this;
+		}
+		
+		public VectorBuilder angularJerk(double angularJerk){
+			vector.put("angularJerk", angularJerk);
+			return this;
+		}
+		
+		public MovementVector createVector(){
+			return this.vector;
+		}
+		
+	}
+	
+	
 }
