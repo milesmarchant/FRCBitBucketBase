@@ -1,5 +1,8 @@
 package org.frcbitbucketbase.control;
 
+import java.util.Arrays;
+import java.util.function.DoubleBinaryOperator;
+
 import org.frcbitbucketbase.control.profile.Profile;
 
 /**
@@ -45,13 +48,23 @@ public class ProfileExecutor extends AutonomousExecutable {
 	 */
 	@Override
 	public boolean verify(){
-		double drive = 0;
+		Double[] drive;
+		Double[] outputs;
 		for(long time = 1; time <= 15000; time++){
-			drive = kc.verify(profile, time);
-			if(drive <= 1){
-				continue;
-			} else if(drive > 1){
-				profile.generateSplines(drive);
+			outputs = kc.getOutputs(profile.getOutput(time));
+			drive = new Double[outputs.length];
+			for(int i = 0; i < outputs.length; i++){
+				drive[i] = Math.abs(outputs[i]);
+			}
+			Double maxWheelV = 0.0;
+			for(Double wheelV: drive){
+				if(wheelV > maxWheelV){
+					maxWheelV = wheelV;
+				}
+			}
+			if(maxWheelV > 1){
+				profile.generateSplines(maxWheelV);
+				time = 0;
 			}
 		}
 		return true;
