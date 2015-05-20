@@ -1,6 +1,7 @@
 package org.frcbitbucketbase.control.profile;
 
 import org.frcbitbucketbase.control.KinematicController;
+import org.frcbitbucketbase.control.MovementVector;
 
 
 /**
@@ -12,14 +13,20 @@ import org.frcbitbucketbase.control.KinematicController;
  */
 public abstract class Profile<T> {	
 	
-	Spline[] splines;
+	protected Spline[] splines;
 	
 	public Profile(){}
 	
 	public abstract T getOutput(long time);
 	
-	public abstract void regenerateSplines(double drive);
+	protected abstract Spline[] generateSplines(MovementVector values);
+	
+	public abstract Spline[] regenerateSplines(double drive);
 	
 	public abstract boolean finished(long time);
+	
+	public void setSplines(Spline[] splines){
+		this.splines = splines;
+	}
 
 }
