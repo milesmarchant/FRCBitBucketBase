@@ -28,7 +28,7 @@ public class MovementVector extends Hashtable<String, Double> {
 			return this;
 		}
 		
-		public VectorBuilder veloctiy(double velocity){
+		public VectorBuilder velocity(double velocity){
 			vector.put("velocity", velocity);
 			return this;
 		}
