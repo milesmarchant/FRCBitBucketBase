@@ -1,6 +1,5 @@
 package org.frcbitbucketbase.control.profile;
 
-import java.util.function.LongFunction;
 
 /**
  * An base class for motion profiles.
@@ -11,6 +10,8 @@ import java.util.function.LongFunction;
  */
 public abstract class Profile<T> {	
 	
+	Spline[] splines;
+	
 	public Profile(){}
 	
 	public abstract T getOutput(long time);
@@ -19,31 +20,6 @@ public abstract class Profile<T> {
 	
 	public boolean finished(long time) {
 		return false;
-	}
-	
-	class Spline{
-		
-		LongFunction<Double> calculator;
-		long startTime;
-		long endTime;
-		
-		public Spline(LongFunction<Double> calculator, long startTime, long endTime){
-			this.calculator = calculator;
-			this.endTime = endTime;
-		}
-		
-		public double calculate(long time){
-			return calculator.apply(time);
-		}
-		
-		public long getStartTime(){
-			return startTime;
-		}
-		
-		public long getEndTime(){
-			return endTime;
-		}
-		
 	}
 
 }
