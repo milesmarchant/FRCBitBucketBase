@@ -1,5 +1,7 @@
 package org.frcbitbucketbase.control.profile;
 
+import org.frcbitbucketbase.control.KinematicController;
+
 
 /**
  * An base class for motion profiles.
@@ -18,8 +20,6 @@ public abstract class Profile<T> {
 
 	public abstract void generateSplines(double drive);
 	
-	public boolean finished(long time) {
-		return false;
-	}
+	public abstract boolean finished(long time);
 
 }
