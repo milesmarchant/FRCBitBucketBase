@@ -10,6 +10,10 @@ import java.util.Hashtable;
 public class MovementVector extends Hashtable<String, Double> {
 	
 	public MovementVector(){}
+	
+	public double getValue(String key){
+		return this.get(key);
+	}
 
 	public static class VectorBuilder{
 		
