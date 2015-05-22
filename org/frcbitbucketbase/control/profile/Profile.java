@@ -19,9 +19,9 @@ public abstract class Profile<T> {
 	
 	public abstract T getOutput(long time);
 	
-	protected abstract Spline[] generateSplines(MovementVector values);
+	protected abstract void generateSplines(MovementVector values);
 	
-	public abstract Spline[] regenerateSplines(double drive);
+	public abstract void regenerateSplines(double drive);
 	
 	public abstract boolean finished(long time);
 	
