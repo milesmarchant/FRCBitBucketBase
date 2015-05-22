@@ -26,7 +26,7 @@ public class TrapezoidalProfile extends Profile<MovementVector> {
 	}
 
 	@Override
-	protected Spline[] generateSplines(MovementVector values) {
+	protected void generateSplines(MovementVector values) {
 		
 //		/*
 //		 * Indexes:
@@ -44,32 +44,13 @@ public class TrapezoidalProfile extends Profile<MovementVector> {
 		if(transAccelDist <= values.getValue("position")/2){
 			
 			long accelEndTime = (long) (velocity / acceleration);
-			Spline accelSpline = accelSpline(acceleration, accelEndTime);
-//					new Spline(time -> new MovementVector.VectorBuilder()
-//					.position(acceleration * Math.pow(time, 2) / 2)
-//					.velocity(acceleration * time)
-//					.acceleration(acceleration).createVector(),
-//					0,
-//					accelEndTime);
-			
 			double flatDist = values.getValue("position") - 2 * transAccelDist;
 			long flatEndTime = accelEndTime + (long)(flatDist / velocity);
-			Spline flatSpline = flatSpline(transAccelDist, velocity, accelEndTime, flatEndTime);
-//					new Spline(time -> new MovementVector.VectorBuilder()
-//					.position(transAccelDist + velocity * (time-accelEndTime))
-//					.velocity(velocity)
-//					.acceleration(0).createVector(),
-//					accelEndTime,
-//					flatEndTime);
-			
 			long decelEndTime = flatEndTime + accelEndTime;
+			
+			Spline accelSpline = accelSpline(acceleration, accelEndTime);
+			Spline flatSpline = flatSpline(transAccelDist, velocity, accelEndTime, flatEndTime);
 			Spline decelSpline = decelSpline(transAccelDist + flatDist, velocity, acceleration, flatEndTime, decelEndTime);
-//					new Spline(time -> new MovementVector.VectorBuilder()
-//					.position(transAccelDist + flatDist + (velocity * time-flatEndTime) - acceleration * Math.pow(time-flatEndTime, 2) / 2)
-//					.velocity(velocity - acceleration * (time-flatEndTime))
-//					.acceleration(-acceleration).createVector(),
-//					flatEndTime,
-//					decelEndTime);
 			
 			transSplines = new Spline[]{accelSpline, flatSpline, decelSpline};
 			
@@ -77,24 +58,43 @@ public class TrapezoidalProfile extends Profile<MovementVector> {
 			
 			double newVelocity = Math.sqrt(acceleration * values.getValue("position"));
 			double newTransAccelDist = values.getValue("position");
-			
 			long accelEndTime = (long) (newVelocity / acceleration);
-			Spline accelSpline = new Spline(time -> new MovementVector.VectorBuilder()
-					.position(acceleration * Math.pow(time, 2) / 2)
-					.velocity(acceleration * time)
-					.acceleration(acceleration).createVector(),
-					0,
-					accelEndTime);
-			
 			long decelEndTime = accelEndTime * 2;
-			Spline decelSpline = new Spline(time -> new MovementVector.VectorBuilder()
-					.position(newTransAccelDist + (newVelocity * time-accelEndTime) - acceleration * Math.pow(time-accelEndTime, 2) / 2)
-					.velocity(newVelocity - acceleration * (time-accelEndTime))
-					.acceleration(-acceleration).createVector(),
-					accelEndTime,
-					decelEndTime);
+
+			Spline accelSpline = accelSpline(acceleration, accelEndTime);
+			Spline decelSpline = decelSpline(newTransAccelDist, newVelocity, acceleration, accelEndTime, decelEndTime);
 			
 			transSplines = new Spline[]{accelSpline, decelSpline};
+			
+		}
+		
+		double rotAcceleration = values.getValue("angularAcceleration");
+		double rotVelocity = values.getValue("angularVel");
+		double rotTransAccelDist = Math.pow(rotVelocity, 2) / (2 * rotAcceleration);
+		if(rotTransAccelDist <= values.getValue("angle")/2){
+			
+			long rotAccelEndTime = (long) (rotVelocity / rotAcceleration);
+			double rotFlatDist = values.getValue("angle") - 2 * transAccelDist;
+			long rotFlatEndTime = rotAccelEndTime + (long)(rotFlatDist / rotVelocity);
+			long rotDecelEndTime = rotFlatEndTime + rotAccelEndTime;
+			
+			Spline rotAccelSpline = accelSpline(rotAcceleration, rotAccelEndTime);
+			Spline rotFlatSpline = flatSpline(rotTransAccelDist, rotVelocity, rotAccelEndTime, rotFlatEndTime);
+			Spline rotDecelSpline = decelSpline(rotTransAccelDist + rotFlatDist, rotVelocity, rotAcceleration, rotFlatEndTime, rotDecelEndTime);
+			
+			transSplines = new Spline[]{rotAccelSpline, rotFlatSpline, rotDecelSpline};
+			
+		} else if(rotTransAccelDist > values.getValue("angle")/2){
+			
+			double newRotVelocity = Math.sqrt(rotAcceleration * values.getValue("angle"));
+			double newRotTransAccelDist = values.getValue("angle");
+			long rotAccelEndTime = (long) (newRotVelocity / rotAcceleration);
+			long rotDecelEndTime = rotAccelEndTime * 2;
+
+			Spline rotAccelSpline = rotAccelSpline(rotAcceleration, rotAccelEndTime);
+			Spline rotDecelSpline = rotDecelSpline(newRotTransAccelDist, newRotVelocity, rotAcceleration, rotAccelEndTime, rotDecelEndTime);
+			
+			transSplines = new Spline[]{rotAccelSpline, rotDecelSpline};
 			
 		}
 		
@@ -102,9 +102,6 @@ public class TrapezoidalProfile extends Profile<MovementVector> {
 		
 		
 		
-		
-		
-		return splines;
 	}
 	
 	private Spline accelSpline(double acceleration, long endTime){
@@ -133,10 +130,39 @@ public class TrapezoidalProfile extends Profile<MovementVector> {
 		startTime,
 		endTime);
 	}
+	
+	//uses non-rot var names
+	private Spline rotAccelSpline(double acceleration, long endTime){
+		return new Spline(time -> new MovementVector.VectorBuilder()
+		.position(acceleration * Math.pow(time, 2) / 2)
+		.velocity(acceleration * time)
+		.acceleration(acceleration).createVector(),
+		0,
+		endTime);
+	}
+	
+	//uses non-rot var names
+	private Spline rotFlatSpline(double startDistance, double velocity, long startTime, long endTime){
+		return new Spline(time -> new MovementVector.VectorBuilder()
+		.position(startDistance + velocity * (time-startTime))
+		.velocity(velocity)
+		.acceleration(0).createVector(),
+		startTime,
+		endTime);
+	}
+	
+	//uses non-rot var names
+	private Spline rotDecelSpline(double startDistance, double velocity, double deceleration, long startTime, long endTime){
+		return new Spline(time -> new MovementVector.VectorBuilder()
+		.position(startDistance + (velocity * time-startTime) - deceleration * Math.pow(time-startTime, 2) / 2)
+		.velocity(velocity - deceleration * (time-startTime))
+		.acceleration(-deceleration).createVector(),
+		startTime,
+		endTime);
+	}
 
 	@Override
-	public Spline[] regenerateSplines(double drive) {
-		return null;
+	public void regenerateSplines(double drive) {
 		// TODO Auto-generated method stub
 	}
 
