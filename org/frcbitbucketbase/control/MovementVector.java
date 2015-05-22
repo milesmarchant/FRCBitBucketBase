@@ -14,12 +14,28 @@ public class MovementVector extends Hashtable<String, Double> {
 	public double getValue(String key){
 		return this.get(key);
 	}
+	
+	public MovementVector merge(MovementVector other){
+		this.putAll(other);
+		return this;
+	}
 
 	public static class VectorBuilder{
 		
 		MovementVector vector = new MovementVector();
 		
 		public VectorBuilder(){
+		}
+		
+		/**
+		 * This will merge two vectors together. The argument will overwrite values that have already been set in the builder.
+		 * 
+		 * @param other another vector to be merged with this. Overwrites keys.
+		 * @return
+		 */
+		public VectorBuilder merge(MovementVector other){
+			vector.merge(other);
+			return this;
 		}
 		
 		public VectorBuilder translationAngle(double translationAngle){
