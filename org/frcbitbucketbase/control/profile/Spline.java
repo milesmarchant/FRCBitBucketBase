@@ -16,7 +16,7 @@ public class Spline{
 		this.endTime = endTime;
 	}
 	
-	public MovementVector calculate(int order, long time){
+	public MovementVector calculate(long time){
 		return functions.apply(time);
 	}
 	
