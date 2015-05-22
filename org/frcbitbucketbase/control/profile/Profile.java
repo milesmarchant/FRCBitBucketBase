@@ -1,6 +1,8 @@
 package org.frcbitbucketbase.control.profile;
 
-import java.util.function.LongFunction;
+import org.frcbitbucketbase.control.KinematicController;
+import org.frcbitbucketbase.control.MovementVector;
+
 
 /**
  * An base class for motion profiles.
@@ -10,40 +12,15 @@ import java.util.function.LongFunction;
  *
  */
 public abstract class Profile<T> {	
-	
+		
 	public Profile(){}
 	
 	public abstract T getOutput(long time);
-
-	public abstract void generateSplines(double drive);
 	
-	public boolean finished(long time) {
-		return false;
-	}
+	protected abstract void generateSplines(MovementVector values);
 	
-	class Spline{
-		
-		LongFunction<Double> calculator;
-		long startTime;
-		long endTime;
-		
-		public Spline(LongFunction<Double> calculator, long startTime, long endTime){
-			this.calculator = calculator;
-			this.endTime = endTime;
-		}
-		
-		public double calculate(long time){
-			return calculator.apply(time);
-		}
-		
-		public long getStartTime(){
-			return startTime;
-		}
-		
-		public long getEndTime(){
-			return endTime;
-		}
-		
-	}
+	public abstract void regenerateSplines(double drive);
+	
+	public abstract boolean finished(long time);
 
 }

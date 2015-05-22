@@ -1,6 +1,5 @@
 package org.frcbitbucketbase.control;
 
-import org.frcbitbucketbase.control.profile.Profile;
 
 /**
  * A base class for Kinematic Controllers. A kinematic controller provides translation from absolute coordinates to motor or output specific values. For example,
@@ -17,8 +16,6 @@ import org.frcbitbucketbase.control.profile.Profile;
  *
  */
 public abstract class KinematicController {
-
-	public abstract double verify(Profile<?> profile, long time);
 	
 	public abstract Double[] getOutputs(MovementVector input);
 	

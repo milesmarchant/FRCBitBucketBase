@@ -60,6 +60,7 @@ public final class AutonomousController{
 				runLoop(startPaused);
 			}
 		});
+		runner.start();
 	}
 	
 	/**
@@ -129,7 +130,6 @@ public final class AutonomousController{
 	public static void clearFinishedActions(){
 		activeExecutors.removeIf(e -> {
 			if(e.isFinished() == true){
-				e.cancel();
 				return true;
 			}
 			return false;
@@ -171,7 +171,7 @@ public final class AutonomousController{
 	 * Initializes the thread, and sets it paused.
 	 */
 	public static void initialize(){
-		if(runner == null || runner.isInterrupted()){
+		if(runner == null || runner.isInterrupted() == true){
 			generateThread(true);
 		}
 	}
@@ -183,7 +183,6 @@ public final class AutonomousController{
 	public static void start(){
 		if(runner == null || runner.isInterrupted() == true){
 			generateThread(false);
-			runner.start();
 		} else{
 			paused = false;
 		}
