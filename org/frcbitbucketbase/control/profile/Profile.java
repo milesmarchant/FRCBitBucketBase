@@ -12,9 +12,7 @@ import org.frcbitbucketbase.control.MovementVector;
  *
  */
 public abstract class Profile<T> {	
-	
-	protected Spline[] splines;
-	
+		
 	public Profile(){}
 	
 	public abstract T getOutput(long time);
@@ -24,9 +22,5 @@ public abstract class Profile<T> {
 	public abstract void regenerateSplines(double drive);
 	
 	public abstract boolean finished(long time);
-	
-	public void setSplines(Spline[] splines){
-		this.splines = splines;
-	}
 
 }
